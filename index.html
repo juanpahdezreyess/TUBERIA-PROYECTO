@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Medición de Presión en una Tubería de Agua</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --success: #10b981;
+            --gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f1f5f9;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 5px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+        }
+        
+        .hero-title {
+            font-size: 3.4rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--muted);
+        }
+
+        .hero-authors {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #e5e7eb;
+        }
+        
+        .intro {
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(99, 102, 241, 0.4);
+        }
+        
+        .intro-title {
+            color: var(--accent-light);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .intro-title::before {
+            content: '🔧';
+            margin-right: 15px;
+            font-size: 2rem;
+        }
+        
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 20px;
+            border-left: 6px solid var(--accent);
+        }
+        
+        .card-title {
+            font-size: 2.2rem;
+            color: var(--accent-light);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title::before {
+            content: '📌';
+            margin-right: 15px;
+            font-size: 2rem;
+        }
+        
+        .step {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 60px;
+            font-weight: 700;
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .math {
+            background: rgba(15, 23, 42, 0.9);
+            border: 3px solid rgba(99, 102, 241, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            font-size: 1.35rem;
+            text-align: center;
+        }
+        
+        .result {
+            background: rgba(16, 185, 129, 0.15);
+            border: 3px solid rgba(16, 185, 129, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .result-title {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .explanation {
+            color: var(--muted);
+            font-size: 1.25rem;
+            margin: 12px 0;
+            line-height: 1.7;
+        }
+        
+        .calculation {
+            background: rgba(99, 102, 241, 0.15);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+        }
+        
+        .large-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+        
+        .step strong {
+            font-size: 1.3rem;
+        }
+
+        .important-note {
+            background: rgba(245, 158, 11, 0.15);
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .important-note-title {
+            color: #f59e0b;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .important-note-title::before {
+            content: '💡';
+            margin-right: 10px;
+        }
+
+        .tag-list {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: rgba(148, 163, 184, 0.15);
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            color: var(--muted);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 2px;
+            }
+            
+            .hero-title {
+                font-size: 2.4rem;
+            }
+            
+            .card {
+                padding: 25px 15px;
+            }
+            
+            .math {
+                padding: 20px;
+                font-size: 1.1rem;
+            }
+            
+            .step-number {
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .intro-title, .card-title {
+                font-size: 1.9rem;
+            }
+            
+            .explanation, .large-text {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- HERO -->
+        <header class="hero">
+            <h1 class="hero-title">SISTEMA DE MEDICIÓN DE PRESIÓN</h1>
+            <p class="hero-subtitle">Tubería de agua con análisis de errores</p>
+            <p class="hero-authors">
+                👨‍🔬 Arturo Yeshua Villaseñor Adame · 👩‍🔬 Mildred Aleshka Hernández Carrillo
+            </p>
+        </header>
+
+        <!-- INTRODUCCIÓN / OBJETIVO -->
+        <section class="intro">
+            <div class="intro-title">OBJETIVO DEL PROYECTO</div>
+            <p class="large-text">
+                Diseñar un <strong style="color: var(--accent-light);">sistema de medición de presión</strong> en una tubería de agua
+                como parte de un sistema de monitoreo en instalaciones hidráulicas.
+                La presión es un parámetro clave para garantizar el funcionamiento
+                <strong>seguro y eficiente</strong> de bombas, válvulas y redes de distribución.
+            </p>
+            <p class="large-text">
+                Con este proyecto se busca obtener lecturas de presión confiables,
+                <strong>analizando los errores de medición</strong> para mejorar la precisión y la exactitud
+                del sistema.
+            </p>
+            <div class="tag-list">
+                <span class="tag">Presión de agua</span>
+                <span class="tag">Sensores piezorresistivos</span>
+                <span class="tag">Arduino</span>
+                <span class="tag">Análisis de errores</span>
+                <span class="tag">Precisión y exactitud</span>
+            </div>
+        </section>
+
+        <!-- DESCRIPCIÓN DEL SISTEMA -->
+        <section class="card">
+            <h2 class="card-title">DESCRIPCIÓN DEL SISTEMA</h2>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <strong>Variable física a medir: Presión</strong>
+                <p class="explanation">
+                    La <strong>presión</strong> es la magnitud que indica cuánta fuerza se aplica por unidad de superficie.
+                    Se expresa en Pascales (Pa) o psi.
+                </p>
+                <div class="math">
+                    \[ P = \frac{F}{A} \]
+                    <p>Donde \(P\) es la presión, \(F\) la fuerza y \(A\) el área.</p>
+                </div>
+                <p class="large-text">
+                    Medir la presión en una tubería permite detectar:
+                    <br>• <strong>Fugas</strong> (caídas de presión)
+                    <br>• <strong>Sobrepresiones</strong> peligrosas
+                    <br>• <strong>Condiciones críticas</strong> que pueden causar fallas o pérdida de servicio.
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <strong>Instrumentos a utilizar</strong>
+                <p class="large-text">
+                    El sistema se compone de los siguientes elementos:
+                </p>
+                <ul class="large-text" style="margin-left: 20px;">
+                    <li><strong>Sensor de presión piezorresistivo MPX5700AP:</strong> convierte la presión del agua en una señal eléctrica proporcional.</li>
+                    <li><strong>Microcontrolador Arduino Uno:</strong> procesa la señal proveniente del sensor.</li>
+                    <li><strong>Convertidor ADC de 10 bits (integrado en Arduino):</strong> transforma la señal analógica en digital.</li>
+                    <li><strong>Pantalla LCD o comunicación serial:</strong> permite mostrar o registrar los valores de presión.</li>
+                </ul>
+                <div class="important-note">
+                    <div class="important-note-title">¿POR QUÉ USAR UN SENSOR PIEZORRESISTIVO?</div>
+                    <p class="large-text">
+                        Este tipo de sensor es adecuado para aplicaciones hidráulicas porque
+                        responde de forma casi lineal a la presión aplicada y puede acoplarse
+                        fácilmente a una tubería de agua.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <strong>Flujo básico de funcionamiento</strong>
+                <p class="large-text">
+                    1. La presión del agua en la tubería actúa sobre el sensor MPX5700AP.<br>
+                    2. El sensor genera un voltaje proporcional a la presión.<br>
+                    3. El Arduino lee este voltaje mediante su ADC de 10 bits.<br>
+                    4. El programa convierte la lectura digital en una <strong>unidad de presión</strong> (Pa o psi).<br>
+                    5. El valor obtenido se muestra en una pantalla o se envía a un sistema de registro.
+                </p>
+            </div>
+        </section>
+
+        <!-- ANÁLISIS DE ERRORES -->
+        <section class="card">
+            <h2 class="card-title">ANÁLISIS DE ERRORES DE MEDICIÓN</h2>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <strong>Tipos de errores considerados</strong>
+                <p class="large-text">
+                    En toda medición existen errores. En este proyecto se analizan tres categorías:
+                </p>
+                <ul class="large-text" style="margin-left: 20px;">
+                    <li><strong>Errores sistemáticos:</strong> errores repetitivos y predecibles.
+                        <br>Ejemplos: mala calibración, error fijo del sensor, no linealidad, variación con la temperatura ambiente.
+                    </li>
+                    <li><strong>Errores aleatorios:</strong> varían de forma impredecible.
+                        <br>Ejemplos: ruido eléctrico, vibraciones, fluctuaciones por tolerancias.
+                    </li>
+                    <li><strong>Errores gruesos:</strong> errores grandes causados por fallas humanas o de instalación.
+                        <br>Ejemplos: conexiones mal hechas, uso incorrecto del software, montaje inadecuado del sensor.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <strong>Precisión vs Exactitud</strong>
+                <div class="calculation">
+                    <p class="large-text">
+                        • <strong>Precisión:</strong> qué tan <u>repetibles</u> son las mediciones.
+                        Si el sistema mide muchas veces y da valores muy similares, es preciso.
+                    </p>
+                    <p class="large-text">
+                        • <strong>Exactitud:</strong> qué tan cerca está la medición del
+                        <u>valor real</u> de la presión.
+                    </p>
+                </div>
+                <div class="important-note">
+                    <div class="important-note-title">IDEA CLAVE</div>
+                    <p class="large-text">
+                        Un sistema puede ser muy <strong>preciso</strong> (repetible) pero <strong>poco exacto</strong>
+                        si está mal calibrado.  
+                        En este proyecto se busca lograr <strong>ambas cosas</strong>:
+                        lecturas repetibles y cercanas al valor real.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">6</div>
+                <strong>Cálculo de errores</strong>
+                <p class="explanation">
+                    Para evaluar el desempeño del sistema se compara la lectura del sensor
+                    con un <strong>manómetro de referencia</strong> correctamente calibrado.
+                </p>
+                <div class="math">
+                    <p><strong>Error absoluto (EA)</strong></p>
+                    \[ EA = |X_{\text{medido}} - X_{\text{real}}| \]
+                </div>
+                <div class="math">
+                    <p><strong>Error relativo (ER)</strong></p>
+                    \[ ER = \frac{EA}{|X_{\text{real}}|} \times 100\% \]
+                </div>
+                <p class="large-text">
+                    • El <strong>EA</strong> indica cuánto se equivoca la medición en unidades de presión.<br>
+                    • El <strong>ER</strong> expresa ese error en porcentaje, lo que facilita comparar
+                    la calidad de distintas mediciones o sensores.
+                </p>
+            </div>
+
+            <div class="result">
+                <div class="result-title">RESULTADO ESPERADO DEL PROYECTO</div>
+                <p class="large-text">
+                    Al finalizar, se espera contar con un sistema capaz de:
+                </p>
+                <ul class="large-text" style="margin-left: 20px;">
+                    <li>Medir la presión en una tubería de agua en tiempo real.</li>
+                    <li>Detectar condiciones de riesgo (fugas, sobrepresiones, caídas críticas).</li>
+                    <li>Ofrecer mediciones con <strong>buena precisión</strong> y <strong>alta exactitud</strong>, gracias al análisis de errores.</li>
+                    <li>Servir como base para un sistema de monitoreo hidráulico más completo.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
